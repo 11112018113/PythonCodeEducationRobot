@@ -1,0 +1,15 @@
+# Core
+asyncio>=3.10
+pydantic>=2.0
+pydantic-settings>=2.0
+
+# Local LLM (RK3588 compatible)
+# Note: rknnllm is Rockchip's RKNN-LLM runtime
+# For development: can use llama.cpp as fallback
+llama-cpp-python>=0.2.0
+
+# Storage
+aiosqlite>=0.19
+
+# Utilities
+python-dotenv>=1.0
