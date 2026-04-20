@@ -7,11 +7,13 @@ class Settings(BaseSettings):
     chat_model_path: str = "/app/models/chat_rkllm"
     story_model_path: str = "/app/models/story_rkllm"
     learn_model_path: str = "/app/models/learn_rkllm"
+    schedule_model_path: str = "/app/models/schedule_rkllm"
 
     dev_coordinator_model: str = "Qwen/Qwen2.5-1.5B-Instruct-GGUF"
     dev_chat_model: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0-GGUF"
     dev_story_model: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0-GGUF"
     dev_learn_model: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0-GGUF"
+    dev_schedule_model: str = "Qwen/Qwen2-0.5B-Instruct-GGUF"
 
     # Runtime settings
     max_tokens: int = 256

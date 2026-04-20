@@ -3,9 +3,12 @@ from agents.coordinator import CoordinatorAgent, CoordinatorConfig
 from agents.chat import ChatAgent, ChatAgentConfig
 from agents.story import StoryAgent, StoryAgentConfig
 from agents.learn import LearnAgent, LearnAgentConfig
+from agents.schedule import ScheduleAgent, ScheduleAgentConfig
 from agents.registry import registry
 from core.message import AgentMessage, MessageType
 from config.settings import settings
+from voice.stt import SpeechToText
+from voice.tts import TextToSpeech
 
 
 class FamilyBot:
@@ -34,23 +37,43 @@ class FamilyBot:
                 model_path=settings.learn_model_path,
             )
         )
+        self.schedule_agent = ScheduleAgent(
+            ScheduleAgentConfig(
+                name="schedule_agent",
+                model_path=settings.schedule_model_path,
+            )
+        )
+        self.stt = SpeechToText()
+        self.tts = TextToSpeech()
 
     async def initialize(self):
         registry.register(self.coordinator)
         registry.register(self.chat_agent)
         registry.register(self.story_agent)
         registry.register(self.learn_agent)
+        registry.register(self.schedule_agent)
         await self.coordinator.initialize()
         await self.chat_agent.initialize()
         await self.story_agent.initialize()
         await self.learn_agent.initialize()
+        await self.schedule_agent.initialize()
+        await self.stt.initialize()
+        await self.tts.initialize()
 
     async def shutdown(self):
         await self.coordinator.shutdown()
         await self.chat_agent.shutdown()
         await self.story_agent.shutdown()
         await self.learn_agent.shutdown()
+        await self.schedule_agent.shutdown()
         registry.clear()
+
+    async def voice_listen(self) -> str:
+        audio = await self.stt.listen()
+        return audio
+
+    async def voice_speak(self, text: str):
+        await self.tts.speak(text)
 
     async def process_message(self, text: str, session_id: str = "default") -> AgentMessage:
         message = AgentMessage(
